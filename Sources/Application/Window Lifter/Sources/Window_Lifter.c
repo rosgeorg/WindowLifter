@@ -75,7 +75,7 @@ void window_down(void)
 	if(BUTTON_UP == B_ACTIVE)
 	{
 		LED_OFF(LED_DOWN);
-		rub_State=	DOWN;
+		rub_State=	UP;
 		ruw_time_button=_0_ms;
 	}    
 	
@@ -127,7 +127,7 @@ void window_up(void)
 		if(BUTTON_DOWN == B_ACTIVE)
 		{
 			LED_OFF(LED_UP);
-			rub_State=UP;
+			rub_State=DOWN;
 			ruw_time_button=_0_ms;
 		}    
 	
@@ -169,13 +169,9 @@ void window_up(void)
 
 void up(void)
 {
-	SIU.PCR[70].R = 0x200;
-			SIU.GPDO[70].B.PDO =  on;
-	if((BUTTON_UP == B_ACTIVE) || (BUTTON_DOWN == B_ACTIVE))
+		if((BUTTON_UP == B_ACTIVE) || (BUTTON_DOWN == B_ACTIVE))
 	{
-		SIU.PCR[71].R = 0x200;
-     	SIU.GPDO[71].B.PDO =  on;
-		window_up();
+			window_up();
 	}
 			
 	else

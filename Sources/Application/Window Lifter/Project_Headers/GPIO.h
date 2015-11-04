@@ -52,8 +52,6 @@
 #define LED_ON(channel)                     (SIU.GPDO[channel].B.PDO =  on)
 /** Clear LED */ 
 #define LED_OFF(channel)                    (SIU.GPDO[channel].B.PDO =  off)
-/** Toggle LED */ 
-#define LED_TOGGLE(channel)                 (SIU.GPDO[channel].B.PDO ^= off) 
 
 
 

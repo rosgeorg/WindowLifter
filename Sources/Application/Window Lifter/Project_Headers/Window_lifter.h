@@ -36,7 +36,6 @@ void button_as_up(void);
 void button_as_down(void);
 void aintipinch(void);
 void relax_5_seconds(void);
-void enableIrq(void);
 
 extern void State_Machine(void);
 

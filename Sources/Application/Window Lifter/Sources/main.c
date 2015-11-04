@@ -24,7 +24,7 @@ void disableWatchdog(void)
 
 
 
-int main(void) {
+	int main(void) {
 	for (;;) {
 	initModesAndClock();
 		
