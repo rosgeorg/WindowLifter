@@ -12,6 +12,7 @@
 #include "typedefs.h"
 #include "MPC5606B.h"
 #include "Button.h"
+#include "LED.h"
 
 
 
@@ -20,24 +21,24 @@
 #define _500_ms                     500
 #define _400_ms                     400
 #define _5_s                        5000
-#define CLOSED                      0 	
-#define OPEN                        10
+#define CLOSED                      9 	
+#define OPEN                        0
 
 
  
 
 
 
-void window_up(void);
-void window_down(void);
-void up(void);
-void down(void);
+void automatic_up(void);
+void automatic_down(void);
+void manual_up(void);
+void manual_down(void);
 void button_as_up(void);
 void button_as_down(void);
 void aintipinch(void);
-void relax_5_seconds(void);
+void lock_wl(void);
 
-extern void State_Machine(void);
+extern void State_Machine();
 
 
 

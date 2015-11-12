@@ -7,6 +7,7 @@
 "./Sources/Window_Lifter_c.obj"
 "./Sources/PLL_c.obj"
 "./Sources/PIT_c.obj"
+"./Sources/LED_c.obj"
 "./Sources/IntcInterrupts_c.obj"
 "./Sources/GPIO_c.obj"
 "./Sources/Exceptions_c.obj"

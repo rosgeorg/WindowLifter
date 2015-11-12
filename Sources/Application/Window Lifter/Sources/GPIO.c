@@ -20,14 +20,14 @@ void GPIO_config(void)
   		SIU.PCR[lub_i].R = 0x200;	
   	}
   	
-  	SIU.GPDO[10].B.PDO = off;
-  	SIU.GPDO[11].B.PDO = off;
+  	/*SIU.GPDO[10].B.PDO = on;
+  	SIU.GPDO[11].B.PDO = on;*/
   	
   	
   	/* Embedded board buttons */
   	SIU.PCR[BUTTON1].R = 0x100;	
   	SIU.PCR[BUTTON2].R = 0x100;
   	SIU.PCR[BUTTON3].R = 0x100;
-  	SIU.PCR[BUTTON4].R = 0x100;	
+  		
 }
 

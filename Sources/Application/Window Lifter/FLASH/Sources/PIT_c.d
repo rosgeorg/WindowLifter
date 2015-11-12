@@ -17,4 +17,5 @@ Sources/PIT_c.obj: C:\Users\benji_000\workspace\Window\ Lifter\Sources\PIT.c \
 	C:\Users\benji_000\workspace\Window\ Lifter\Project_Headers\MPC5606B.h \
 	C:\Users\benji_000\workspace\Window\ Lifter\Project_Headers\Window_lifter.h \
 	C:\Users\benji_000\workspace\Window\ Lifter\Project_Headers\GPIO.h \
-	C:\Users\benji_000\workspace\Window\ Lifter\Project_Headers\Button.h 
+	C:\Users\benji_000\workspace\Window\ Lifter\Project_Headers\Button.h \
+	C:\Users\benji_000\workspace\Window\ Lifter\Project_Headers\LED.h 

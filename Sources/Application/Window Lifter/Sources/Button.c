@@ -8,12 +8,12 @@
 
 extern uint16_t rub_State;
 
-void button_signal (void)
+void button_validation (void)
 {
 	static uint16_t lub_counter_button=0;
-		
 	
-		if((BUTTON_DOWN == B_ACTIVE) && (BUTTON_UP == B_INACTIVE))
+	
+		if((BUTTON_DOWN) && !(BUTTON_UP))
 		{	
 			
 			lub_counter_button++;                       /*Increases counter to 10 milliseconds*/
@@ -27,12 +27,12 @@ void button_signal (void)
 			
 			else 
 			{
-				//nothing
+				rub_State=LWEAKNESS;
 			}
 		}
 				
 				
-		else if((BUTTON_UP == B_ACTIVE) && (BUTTON_DOWN == B_INACTIVE) )
+		else if((BUTTON_UP) && !(BUTTON_DOWN) )
 		{		
 			
 			lub_counter_button++;	             /*Increases counter to 10 milliseconds*/
@@ -45,13 +45,14 @@ void button_signal (void)
 			
 			else
 			{
-				//nothing
+				rub_State=LWEAKNESS;
 			}
 		}
 				
 		else
 		{
 			lub_counter_button=_0_ms;       /* Reset counter*/
+			rub_State=LWEAKNESS;
 		}
 }
 

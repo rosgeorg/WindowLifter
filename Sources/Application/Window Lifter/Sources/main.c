@@ -7,6 +7,7 @@
 #include "Button.h"
 #include "IntcInterrupts.h"
 #include "Exceptions.h"
+#include "LED.h"
 
 
 
@@ -25,32 +26,34 @@ void disableWatchdog(void)
 
 
 	int main(void) {
-	for (;;) {
-	initModesAndClock();
-		
-		/* Disable Watchdog */
-		disableWatchdog();
-		
-		/*Initialize LEDs */
-		GPIO_config();
-		
-		/*Initialize Interrupts */
-		INTC_InitINTCInterrupts();
-		
-		/*Initialize Exception Handlers */
-		EXCEP_InitExceptionHandlers();
-		
-		
-	
-		
-		PIT_device_init();
-		PIT_channel_config(PITCHANNEL_0 );	
-		PIT_channel_active(PITCHANNEL_0);
-		PIT_channel0_ISR();
-	    
-		INTC_InstallINTCInterruptHandler(PIT_channel0_ISR,59,1);  /* Install Interrupt routine for this specific channel */
-  
+		initModesAndClock();
+				
+				/* Disable Watchdog */
+				disableWatchdog();
+				
+				/*Initialize LEDs, turn on LEDs */
+				GPIO_config();
+				window_closed();
+				/*Initialize Interrupts */
+				INTC_InitINTCInterrupts();
+				
+				/*Initialize Exception Handlers */
+				EXCEP_InitExceptionHandlers();
+				
+				
+			
+				PIT_device_init();
+				PIT_channel_config(PITCHANNEL_0 );
+				PIT_channel_active(PITCHANNEL_0);
+				INTC.CPR.B.PRI=0;
+				INTC_InstallINTCInterruptHandler(PIT_channel0_ISR,59,1);  /* Install Interrupt routine for this specific channel */
+														  
 
+				
+	for (;;) {
+		
+		
+						
 
   /* Loop forever */
   }

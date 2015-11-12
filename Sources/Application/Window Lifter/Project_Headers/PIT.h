@@ -12,6 +12,7 @@
 
 #define    PITCHANNEL_0					0
 
+
 #define    DEVICE_FREQUENCY           (uint32_t)64000000
 #define    CHANNEL_DESIRED_FREQUENCY   (uint32_t)1000
 
@@ -35,5 +36,6 @@ void PIT_channel_stop(uint8_t channel);
 
 /** PIT Channel 0 ISR  */
 void PIT_channel0_ISR(void);
+
 
 #endif /* PIT_H_ */

@@ -15,22 +15,24 @@
 #include "typedefs.h"
 #include "MPC5606B.h"
 #include "Window_lifter.h"
-
+#include "LED.h"
 
 
  enum ESTATUS
 {
 	LWEAKNESS ,
-	UP,
-	DOWN,
+	AUTOMATIC_UP,
+	AUTOMATIC_DOWN,
+	MANUAL_UP,
+	MANUAL_DOWN,
 	BUTTON_AS_UP,
 	BUTTON_AS_DOWN,
 	ANTIPINCH,
-	RELAX_5_SECONDS
+	LOCK_WL
 };
 
 
-extern void button_signal (void);
+extern void button_validation (void);
 
 
 #endif /* BUTTON_H_ */

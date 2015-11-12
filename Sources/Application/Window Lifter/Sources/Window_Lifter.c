@@ -11,9 +11,9 @@
 
 
 
-uint16_t rub_LED_Position=LED1;
+uint16_t rub_LED_Position=LED10;
 uint16_t ruw_time_button=_0_ms, ruw_time_transition=_0_ms;
-
+uint8_t auto_val;
 uint16_t rub_State=LWEAKNESS;
 
 
@@ -27,20 +27,30 @@ void State_Machine(void)
 	switch(rub_State)
 	{
 		case LWEAKNESS:
-			button_signal();     
+			button_validation();     
 			break;
 			
 		
-		case UP:
-			up();
+		case AUTOMATIC_UP:
+			automatic_up();
 			break;
 			
 			
-		case DOWN:
-			down();
+		case AUTOMATIC_DOWN:
+			automatic_down();
+			break;
+		
+			
+		case MANUAL_UP:
+			manual_up();
+			break;
+		
+			
+		case MANUAL_DOWN:
+			manual_down();
 			break;
 			
-			
+						
 		case BUTTON_AS_UP:
 			button_as_up();
 			break;
@@ -55,8 +65,8 @@ void State_Machine(void)
 			aintipinch();
 			break;
 			
-		case RELAX_5_SECONDS:
-			relax_5_seconds();
+		case LOCK_WL:
+			lock_wl();
 			break;
 	}  
 	
@@ -70,165 +80,174 @@ void State_Machine(void)
 
 
 /**************************************************************/
-void window_down(void)
+void automatic_up(void)
 {
-	if(BUTTON_UP == B_ACTIVE)
+	if(BUTTON_UP)
 	{
-		LED_OFF(LED_DOWN);
-		rub_State=	UP;
-		ruw_time_button=_0_ms;
-	}    
-	
-	else
+		auto_val=1;
+	}
+	else if (BUTTON_DOWN)
+	{
+		rub_State=LWEAKNESS;
+	}
+	if(PIT.CH[0].TFLG.B.TIF == 1)
 	{
 		ruw_time_transition++;
-		if((ruw_time_transition==_400_ms) && (rub_LED_Position<=LED10))
+		PIT.CH[0].TFLG.B.TIF = 1; //Limpiar la bandera, w1c
+		if((auto_val == 1) && (ruw_time_transition==_400_ms))
 		{
-			LED_ON(LED_DOWN);
-			LED_OFF(rub_LED_Position);
+			LED_ON(rub_LED_Position); //Prender el led correspondiente a Led_Position
 			rub_LED_Position++;
-			ruw_time_transition=_0_ms;
+			if(rub_LED_Position > 9)
+			{
+				rub_LED_Position = 9;
+				auto_val = 0;
+				rub_State=LWEAKNESS;
+			}
 		}
-		
-		else
-		{
-			//nothing
-		}
-			
-		if(rub_LED_Position==OPEN)
-		{
-			rub_State=LWEAKNESS;
-			rub_LED_Position=LED10;
-			ruw_time_button=_0_ms	;
-			LED_OFF(LED_DOWN);
-		}
-		
-		else
-		{
-			//nothing
-		}
-	}   	
-	
-}  
-/*************** End function window_down ***************/
+
+}
+}
+
+/*************** End function automatic_up ***************/
 
 
 /**************************************************************/
-void window_up(void)
-{	
-	if(ANTI_PINCH==B_ACTIVE)
+void automatic_down(void)
+{
+	if(BUTTON_UP)
 	{
-		ruw_time_button=_0_ms;
-		rub_State=ANTIPINCH;	
-	} 
-	
+		
+		rub_State=LWEAKNESS;
+	}
 	else
-	{	
-		if(BUTTON_DOWN == B_ACTIVE)
+	{
+		SIU.PCR[68].R = 0x200;
+		SIU.GPDO[68].B.PDO=0;
+		auto_val=2;
+		
+	ruw_time_transition++;
+	
+		if((auto_val == 2) && (ruw_time_transition==_400_ms))
 		{
-			LED_OFF(LED_UP);
-			rub_State=DOWN;
+			LED_OFF(rub_LED_Position); //Apagar el led correspondiente a Led_Position
+			rub_LED_Position--;
+			if(rub_LED_Position == 0)
+			{
+				rub_LED_Position = 0;
+				auto_val = 0;
+				rub_State = LWEAKNESS;
+			}
+		}
+	}
+}
+	
+
+/*************** End function automatic_down ***************/
+
+/**************************************************************/
+
+void manual_up(void)
+{
+
+if(PIT.CH[0].TFLG.B.TIF == 1)
+{
+	ruw_time_transition++;
+	if(ruw_time_transition == _400_ms)	
+	{
+		PIT.CH[0].TFLG.B.TIF = 1; //Limpiar la bandera, w1c
+		if(BUTTON_UP)
+		{
+			LED_ON(rub_LED_Position); //Turns on LED based on variable "Led_Position"
+			rub_LED_Position++;
+			if(rub_LED_Position >= 9)
+			{
+				rub_LED_Position = 9;
+				rub_State = LWEAKNESS;
+			}
+		 }
+		else
+		{
+			rub_State = LWEAKNESS;
+		}
+	}
+}
+}
+
+
+/*************** End function manual_up ***************/
+
+/**************************************************************/
+
+void manual_down(void)
+{
+	if(BUTTON_UP == B_ACTIVE)
+		{
+			LED_OFF(LED_DOWN);
+			rub_State=BUTTON_AS_UP;
 			ruw_time_button=_0_ms;
 		}    
 	
-		else
+	else
+	{
+		
+	ruw_time_transition++;
+		if(ruw_time_transition == _400_ms)
 		{
-			ruw_time_transition++;
-			if((ruw_time_transition==_400_ms) && (rub_LED_Position>=LED1))
+
+			if(BUTTON_DOWN == B_ACTIVE)
 			{
-				LED_ON(LED_UP);
-				LED_ON(rub_LED_Position);
+							
+				LED_OFF(rub_LED_Position); //Turns off LED based on variable "Led_Position"
 				rub_LED_Position--;
 				ruw_time_transition=_0_ms;
-			}
-			
-			else
+				
+				if(rub_LED_Position == 0)
+				{
+					rub_LED_Position = 0;
+					rub_State = LWEAKNESS;
+				}
+			 }
+			else 
 			{
-				//nothing
-			}
-			
-			if(rub_LED_Position==CLOSED)
-			{
-				rub_State=LWEAKNESS;
-				rub_LED_Position=LED1;
-				ruw_time_button=_0_ms;
-				LED_OFF(LED_UP);
-			}	
-			
-			else
-			{
-				//nothing
+				rub_State = LWEAKNESS;	
 			}
 		}
+		
+		
 	}
-	
-}  /*************** End function window_up ***************/
+}
 
 
-/**************************************************************/
-
-void up(void)
-{
-		if((BUTTON_UP == B_ACTIVE) || (BUTTON_DOWN == B_ACTIVE))
-	{
-			window_up();
-	}
-			
-	else
-	{
-		ruw_time_button=_0_ms;
-		rub_State=LWEAKNESS;	
-		LED_OFF(LED_UP);	
-	}	
-}   /*************** End function manual_up ***************/
+/*************** End function manual_down *********************/
 
 
-
-/**************************************************************/
-
-void down(void)
-{
-	
-						
-	if((BUTTON_DOWN == B_ACTIVE) || (BUTTON_UP == B_ACTIVE))
-	{
-		window_down();
-	}
-			
-	else
-	{
-		ruw_time_button=_0_ms;
-		rub_State=LWEAKNESS;	
-		LED_OFF(LED_DOWN);	
-	}
-}    /*************** End function manual_down ***************/
 
 /**************************************************************/
 
 void button_as_up(void)
 {
-	if(BUTTON_UP == B_ACTIVE)
+	LED_ON(LED_UP);
+	LED_OFF(LED_DOWN);
+	
+	if(PIT.CH[0].TFLG.B.TIF == 1)
 	{
 		ruw_time_button++;
-		if((ruw_time_button>_500_ms) && (BUTTON_UP == B_ACTIVE))
+		if(ruw_time_button>_500_ms)
 		{
-				
-			
-			rub_State=UP;
+							
+			rub_State=MANUAL_UP;
 		}
 		
-		else
+		else if(ruw_time_button<_500_ms)
 		{
-			//nothing
+			rub_State=AUTOMATIC_UP;
 		}
 	}
 	
-	else
-	{
-		window_up();	
-	}
-			
-}   /*************** End function automatic_up_action ***************/
+}  
+
+/*************** End function automatic_up_action ***************/
 
 
 
@@ -236,31 +255,33 @@ void button_as_up(void)
 
 void button_as_down(void)
 {
-	
-		
-	if(BUTTON_DOWN == B_ACTIVE)
-	{
-		
-		ruw_time_button++;
-		if((ruw_time_button >  _500_ms) && (BUTTON_DOWN == B_ACTIVE))
+	LED_ON(LED_DOWN);
+	LED_OFF(LED_UP);
+
+	if(BUTTON_DOWN == B_ACTIVE)						
+	{		ruw_time_button++;
+		if((ruw_time_button >=_500_ms) && (BUTTON_DOWN==B_ACTIVE))
 		{
 			
-			rub_State=DOWN;
+			rub_State=MANUAL_DOWN;
 		}
-		
 		else
 		{
-			
 			//nothing
 		}
-	}
-	
-	else
-	{
 		
-		window_down();	
+		
 	}
-}  /*************** End function automatic_down_action ***************/
+	else
+		{
+		SIU.PCR[69].R = 0x200;
+												SIU.GPDO[69].B.PDO=0;
+			rub_State=AUTOMATIC_DOWN;
+		
+		}
+		
+}
+/*************** End function automatic_down_action ***************/
 
 /**************************************************************/
 
@@ -269,37 +290,45 @@ void aintipinch(void)
 	ruw_time_button++;	       
 	if(ruw_time_button>=_10_ms)
 	{
-		ruw_time_transition++;
-		if((ruw_time_transition==_400_ms) && (rub_LED_Position<=LED10))
-		{
-			LED_OFF(LED_UP);
-			LED_ON(LED_DOWN);
-			LED_OFF(rub_LED_Position);
-			rub_LED_Position--;
-			ruw_time_transition=_0_ms;
-		}
-			
-		if(rub_LED_Position==OPEN)
-		{
-			rub_LED_Position=LED1;
-			ruw_time_button=_0_ms;
-			LED_OFF(LED_DOWN);
-			rub_State=RELAX_5_SECONDS;
+		if(PIT.CH[0].TFLG.B.TIF == 1)
+			{	 
+				ruw_time_transition++;
+				PIT.CH[0].TFLG.B.TIF = 1;
+				LED_OFF(LED_UP);
+				LED_ON(LED_DOWN);
+						if(ruw_time_transition==_400_ms)
+						{
+						
+							LED_OFF(rub_LED_Position);
+							rub_LED_Position--;
+							ruw_time_transition=_0_ms;
+							if(rub_LED_Position <= 0)
+										{
+										rub_LED_Position = 0;
+											rub_State = LOCK_WL;
+										}
+							
+						}
+							
 		}
 	}
-}   /*************** End function antipinch ***************/
+}
+/*************** End function antipinch ***************/
 
 
 /**************************************************************/
 
-void relax_5_seconds(void)
+void lock_wl(void)
 {
-	static uint8_t luw_time_RELAX;
-	luw_time_RELAX++;
-	if(luw_time_RELAX==_5_s)
+	static uint8_t luw_time_LOCK;
+	luw_time_LOCK++;
+	if(luw_time_LOCK==_5_s)
 	{
-		luw_time_RELAX=_0_ms;
+		luw_time_LOCK=_0_ms;
 		rub_State=LWEAKNESS;
 	}
-}   /**************** End function relax_5_seconds ***************/
+}   
+
+
+/**************** End function relax_5_seconds ***************/
 

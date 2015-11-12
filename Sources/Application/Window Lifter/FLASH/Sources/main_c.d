@@ -16,6 +16,7 @@ Sources/main_c.obj: C:\Users\benji_000\workspace\Window\ Lifter\Sources\main.c \
 	C:\Users\benji_000\workspace\Window\ Lifter\Project_Headers\Window_lifter.h \
 	C:\Users\benji_000\workspace\Window\ Lifter\Project_Headers\GPIO.h \
 	C:\Users\benji_000\workspace\Window\ Lifter\Project_Headers\Button.h \
+	C:\Users\benji_000\workspace\Window\ Lifter\Project_Headers\LED.h \
 	C:\Users\benji_000\workspace\Window\ Lifter\Project_Headers\PIT.h \
 	C:\Users\benji_000\workspace\Window\ Lifter\Project_Headers\PLL.h \
 	C:\Users\benji_000\workspace\Window\ Lifter\Project_Headers\IntcInterrupts.h \
