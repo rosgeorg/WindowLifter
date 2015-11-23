@@ -82,7 +82,7 @@ void State_Machine(void)
 	{
 		case LWEAKNESS:
 			lweakness ();
-			//button_validation();     
+			   
 			break;
 			
 		
@@ -261,8 +261,7 @@ void manual_up(void)
 
 void manual_down(void)
 {
-	SIU.PCR[69].R = 0x200;
-	SIU.GPDO[69].B.PDO=0;	
+		
 	if(BUTTON_UP == B_ACTIVE) 
 		{
 			LED_OFF(LED_DOWN);
@@ -359,8 +358,7 @@ void button_as_down(void)
 		ruw_time_button++;
 		if((ruw_time_button >=_500_ms) && (BUTTON_DOWN==B_ACTIVE))
 		{
-			SIU.PCR[68].R = 0x200;
-			SIU.GPDO[68].B.PDO=0;
+			
 			ruw_time_button=_0_ms;
 			rub_State=MANUAL_DOWN;
 		}

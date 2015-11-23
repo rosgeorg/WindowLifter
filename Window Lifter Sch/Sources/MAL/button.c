@@ -85,14 +85,14 @@ void button_validation (void)
 				
 				rub_Movement=DOWN;
 				lub_counter_button=_0_ms;    /* Reset counter*/
-				//rub_State=BUTTON_AS_DOWN;
+				
 				
 			}
 			
 			else 
 			{
 				
-				//rub_State=LWEAKNESS;
+				
 			}
 		}
 				
@@ -105,14 +105,14 @@ void button_validation (void)
 			{
 				rub_Movement=UP;
 				lub_counter_button=_0_ms;    /* Reset counter*/
-				//rub_State=BUTTON_AS_UP;
+				
 				
 			}
 			
 			else
 			{
 				
-				//rub_State=LWEAKNESS;
+				
 			}
 		}
 		
@@ -123,20 +123,20 @@ void button_validation (void)
 						{
 							rub_Movement=PINCH;
 							lub_counter_button=_0_ms;  
-							//rub_State=ANTIPINCH;
+						
 							
 						}
 						else
 						{
 							
-							//rub_State=LWEAKNESS;
+							
 						}
 		}
 		else
 		{
 			
 			lub_counter_button=_0_ms;       /* Reset counter*/
-			//rub_State=LWEAKNESS;
+			
 		}
 }
 

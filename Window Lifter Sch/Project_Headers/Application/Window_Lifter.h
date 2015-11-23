@@ -59,7 +59,7 @@
 #define _0_ms                       0
 #define _10_ms                      10
 #define _500_ms                     500
-#define _400_ms                     300
+#define _400_ms                     250
 #define _5_s                        5000
 #define CLOSED                      10 	
 #define OPEN                        65535
